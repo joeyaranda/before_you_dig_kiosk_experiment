@@ -88,6 +88,7 @@ class PDFSplitter(object):
         byd_request_number_list = []
         nuos_list = []
         plan_name_list = []
+        dictio_list = []
         
         a=0
         for dirpath, dirnames, filenames in os.walk(inputprocessedsplitpdfdir):
@@ -103,15 +104,17 @@ class PDFSplitter(object):
                             normpath = os.path.normpath(dirpath)
                             split_path = normpath.split(os.sep)
                             byd_request_number_list.append(split_path[-2])
+                            plan_name_list.append(name+"."+format)
                             if split_path[-1] == "01_unclassified-pdf":
                                 nuos_list.append("Unclassified")
+                                dictio_list.append({"BYD Request Number":split_path[-2],"Plan Name":name+"."+format,"NUO":"Unclassified"})
                             else:
                                 nuos_list.append(split_path[-1])
-                            plan_name_list.append(name+"."+format)
+                                dictio_list.append({"BYD Request Number":split_path[-2],"Plan Name":name+"."+format,"NUO":split_path[-1]})
                             outputconvimagedir = dirpath.replace("Processed_splitpdf","Processed_image")
                             os.makedirs(outputconvimagedir,exist_ok=True)
-                            pix.save(os.path.join(outputconvimagedir,f"{name}.{format}"))
-                            print(a,f"Successfully generated {format} of {file}")
+                            # pix.save(os.path.join(outputconvimagedir,f"{name}.{format}"))
+                            # print(a,f"Successfully generated {format} of {file}")
                     elif mode == "high-res":
                         file_path = os.path.join(dirpath,file)
                         dpi = dpi_val
@@ -125,32 +128,34 @@ class PDFSplitter(object):
                             normpath = os.path.normpath(dirpath)
                             split_path = normpath.split(os.sep)
                             byd_request_number_list.append(split_path[-2])
+                            plan_name_list.append(name+"."+format)
                             if split_path[-1] == "01_unclassified-pdf":
                                 nuos_list.append("Unclassified")
+                                dictio_list.append({"BYD Request Number":split_path[-2],"Plan Name":name+"."+format,"NUO":"Unclassified"})
                             else:
                                 nuos_list.append(split_path[-1])
-                            plan_name_list.append(name+"."+format)
+                                dictio_list.append({"BYD Request Number":split_path[-2],"Plan Name":name+"."+format,"NUO":split_path[-1]})
                             outputconvimagedir = dirpath.replace("Processed_splitpdf","Processed_image")
                             os.makedirs(outputconvimagedir,exist_ok=True)
-                            pix.save(os.path.join(outputconvimagedir,f"{name}.{format}"))
-                            print(a,f"Successfully generated {format} of {file}")
+                            # pix.save(os.path.join(outputconvimagedir,f"{name}.{format}"))
+                            # print(a,f"Successfully generated {format} of {file}")
                 else:
                     outputconvimagedir = dirpath.replace("Processed_splitpdf","Processed_image")
                     os.makedirs(outputconvimagedir,exist_ok=True)
                     shutil.copyfile(os.path.join(dirpath,file),os.path.join(outputconvimagedir,file))
         
-        df = pd.DataFrame()
-        df['BYD Request Number'] = byd_request_number_list
-        df['Plan Name'] = plan_name_list
-        df['NUO'] = nuos_list
-        df['Assigned to'] = ""
-        df['Georeference'] = ""
-        df['Upload'] = ""
-        df['QA by'] = ""
-        df['QA'] = ""
-        df['Phase 2 Time Started'] = ""
-        df['Phase 3 Time Ended'] = ""
-        df.to_excel(outputxlsx)
+        # df = pd.DataFrame()
+        # df['BYD Request Number'] = byd_request_number_list
+        # df['Plan Name'] = plan_name_list
+        # df['NUO'] = nuos_list
+        # df['Assigned to'] = ""
+        # df['Georeference'] = ""
+        # df['Upload'] = ""
+        # df['QA by'] = ""
+        # df['QA'] = ""
+        # df['Phase 2 Time Started'] = ""
+        # df['Phase 3 Time Ended'] = ""
+        # df.to_excel(outputxlsx)
     
     # def split_pdf(self,inputdir,outputdir):
 
